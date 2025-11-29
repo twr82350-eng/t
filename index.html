@@ -27,7 +27,7 @@ html, body {
   text-align: center;
   transition: opacity 1s ease;
   opacity: 0;
-  pointer-events: none; /* לא פעיל עד שמקבלים active */
+  pointer-events: none;
 }
 .screen.active {
   opacity: 1;
@@ -151,14 +151,29 @@ h1 { font-size: 48px; animation: fadeInText 2s ease-in-out; }
     <p>My PC</p>
   </div>
 
+  <!-- My PC Window -->
   <div class="window" id="win1">
     <div class="window-header" onmousedown="dragMouseDown(event, 'win1')">
-      <span>Welcome Window</span>
+      <span>My PC</span>
       <span class="closeBtn" onclick="closeWindow('win1')">✖</span>
     </div>
     <div class="window-body">
-      <h2>Welcome блат</h2>
-      <p>Это Windows Soviet Desktop</p>
+      <p>Files:</p>
+      <div class="icon" onclick="openWindow('file1')">
+        <img src="assets/logo.png" alt="File Icon">
+        <p>המנהיגה.png</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Window -->
+  <div class="window" id="file1" style="width:400px; height:400px;">
+    <div class="window-header" onmousedown="dragMouseDown(event, 'file1')">
+      <span>המנהיגה.png</span>
+      <span class="closeBtn" onclick="closeWindow('file1')">✖</span>
+    </div>
+    <div class="window-body" style="display:flex;justify-content:center;align-items:center;">
+      <img src="assets/המנהיגה.png" alt="המנהיגה" style="max-width:100%; max-height:100%;">
     </div>
   </div>
 
@@ -182,7 +197,7 @@ setTimeout(() => {
   document.getElementById('bootup').classList.remove('active');
   setTimeout(() => {
     document.getElementById('lockscreen').classList.add('active');
-    document.getElementById('password').focus(); // מוודא שהשדה מקבל פוקוס
+    document.getElementById('password').focus();
   }, 1000);
 }, 3000);
 
