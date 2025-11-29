@@ -1,32 +1,222 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Windows Soviet 11</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Windows Soviet</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background: url('assets/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  overflow: hidden;
+}
+
+/* כל המסכים */
+.screen {
+  display: none;
+  height: 100%;
+  width: 100%;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  text-align: center;
+}
+
+/* Bootup */
+#bootup img {
+  width: 200px;
+  margin-bottom: 20px;
+  animation: fadeIn 2s infinite alternate;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0.2;}
+  100% {opacity:1;}
+}
+
+/* Lock screen */
+input[type="password"] {
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Welcome screen */
+h1 {
+  font-size: 48px;
+  animation: fadeInText 2s ease-in-out;
+}
+@keyframes fadeInText {
+  0% {opacity:0; transform: translateY(20px);}
+  100% {opacity:1; transform: translateY(0);}
+}
+
+/* Desktop */
+#desktop {
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  color: black;
+}
+
+/* Taskbar */
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+/* Start button */
+#startBtn {
+  width: 60px;
+  height: 30px;
+  background: #0078D7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Desktop icons */
+.icon {
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
+  margin: 20px;
+  color: white;
+}
+.icon img {
+  width: 64px;
+}
+
+/* Window */
+.window {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: none;
+  flex-direction: column;
+}
+.window-header {
+  background: #0078D7;
+  color: white;
+  padding: 5px 10px;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+}
+.window-body {
+  flex: 1;
+  padding: 10px;
+  overflow: auto;
+}
+.closeBtn {
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
 
-<div id="boot">
-    <img src="assets/logo.png" class="boot-logo">
-    <p class="boot-text">Windows Soviet</p>
+<!-- Bootup -->
+<div id="bootup" class="screen" style="display:flex;">
+  <img src="assets/logo.png" alt="Windows Soviet Logo">
+  <p>Loading...</p>
 </div>
 
-<div id="lockscreen">
-    <div class="clock" id="clock"></div>
-    <input id="lockInput" type="password" placeholder="Enter Password">
-    <button onclick="unlock()">Login</button>
+<!-- Lock Screen -->
+<div id="lockscreen" class="screen">
+  <h2>Enter Password</h2>
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="checkPassword()">Login</button>
 </div>
 
-<div id="welcome">
-    <p>Welcome блять</p>
+<!-- Welcome Screen -->
+<div id="welcome" class="screen">
+  <h1>Welcome блат</h1>
 </div>
 
+<!-- Desktop -->
 <div id="desktop">
-    <div class="taskbar">SovietOS</div>
-    <p class="desktop-text">ברוך הבא ל-Windows Soviet 11</p>
+  <div class="icon" onclick="openWindow('win1')">
+    <img src="assets/logo.png" alt="Icon">
+    <p>My PC</p>
+  </div>
+
+  <div class="window" id="win1">
+    <div class="window-header">
+      <span>Welcome Window</span>
+      <span class="closeBtn" onclick="closeWindow('win1')">✖</span>
+    </div>
+    <div class="window-body">
+      <h2>Welcome блат</h2>
+      <p>Это Windows Soviet Desktop</p>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <button id="startBtn" onclick="alert('Start Menu')">Start</button>
+  </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+function startOS() {
+  setTimeout(() => {
+    document.getElementById('bootup').style.display = 'none';
+    document.getElementById('lockscreen').style.display = 'flex';
+  }, 3000);
+}
+
+function checkPassword() {
+  const pw = document.getElementById('password').value;
+  if(pw === '1234') {
+    document.getElementById('lockscreen').style.display = 'none';
+    document.getElementById('welcome').style.display = 'flex';
+    setTimeout(() => {
+      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('desktop').style.display = 'block';
+    }, 2000);
+  } else {
+    alert('Wrong password!');
+  }
+}
+
+function openWindow(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+
+function closeWindow(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+startOS();
+</script>
+
 </body>
 </html>
