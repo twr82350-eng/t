@@ -14,7 +14,7 @@ html, body {
   overflow: hidden;
 }
 
-/* מסכים */
+/* כל המסכים */
 .screen {
   position: absolute;
   width: 100%;
@@ -27,9 +27,13 @@ html, body {
   text-align: center;
   transition: opacity 1s ease;
   opacity: 0;
-  z-index: 10;
+  pointer-events: none; /* לא פעיל עד שמקבלים active */
 }
-.screen.active { opacity: 1; }
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 100;
+}
 
 /* Bootup */
 #bootup img { width: 200px; margin-bottom: 20px; animation: fadeIn 2s infinite alternate; }
@@ -116,7 +120,7 @@ h1 { font-size: 48px; animation: fadeInText 2s ease-in-out; }
 }
 #startMenu button:hover { background: rgba(255,255,255,0.2); }
 
-/* Animations */
+/* Window animations */
 @keyframes slideDown { from { transform: translateY(-20px); opacity:0;} to { transform: translateY(0); opacity:1;} }
 </style>
 </head>
@@ -178,12 +182,13 @@ setTimeout(() => {
   document.getElementById('bootup').classList.remove('active');
   setTimeout(() => {
     document.getElementById('lockscreen').classList.add('active');
+    document.getElementById('password').focus(); // מוודא שהשדה מקבל פוקוס
   }, 1000);
 }, 3000);
 
 // Password
 function checkPassword() {
-  const pw = document.getElementById('password').value;
+  const pw = document.getElementById('password').value.trim();
   if(pw === '1234') {
     document.getElementById('lockscreen').classList.remove('active');
     document.getElementById('welcome').classList.add('active');
@@ -239,10 +244,7 @@ function dragMouseDown(e, id) {
   document.addEventListener("mouseup", closeDrag);
   document.addEventListener("mousemove", elementDrag);
 }
-
-// Start OS
-function startOS() { /* Already handled */ }
-
 </script>
+
 </body>
 </html>
