@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    background: black;
+    font-family: Arial;
+    color: white;
+}
+
+/* Boot Screen */
+#boot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.boot-logo {
+    width: 180px;
+}
+.boot-text {
+    margin-top: 20px;
+    font-size: 26px;
+}
+
+/* Lock screen */
+#lockscreen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: url("https://i.postimg.cc/J4vT21bF/IMG-4080.jpg") center/cover;
+}
+#lockInput {
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 20px;
+}
+.clock {
+    font-size: 40px;
+}
+
+/* Welcome */
+#welcome {
+    display: none;
+    font-size: 40px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Desktop */
+#desktop {
+    display: none;
+    background: #1a1a1a;
+    height: 100vh;
+}
+.taskbar {
+    width: 100%;
+    background: #333;
+    padding: 10px;
+    position: absolute;
+    bottom: 0;
+}
+.desktop-text {
+    margin: 30px;
+    font-size: 24px;
+}
