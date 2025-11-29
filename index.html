@@ -14,113 +14,50 @@ html, body {
   overflow: hidden;
 }
 
-/* כל המסכים */
+/* מסכים */
 .screen {
-  display: none;
-  height: 100%;
+  position: absolute;
   width: 100%;
-  color: white;
+  height: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  display: flex;
+  color: white;
   text-align: center;
+  transition: opacity 1s ease;
+  opacity: 0;
+  z-index: 10;
 }
+.screen.active { opacity: 1; }
 
 /* Bootup */
-#bootup img {
-  width: 200px;
-  margin-bottom: 20px;
-  animation: fadeIn 2s infinite alternate;
-}
-
-@keyframes fadeIn {
-  0% {opacity:0.2;}
-  100% {opacity:1;}
-}
+#bootup img { width: 200px; margin-bottom: 20px; animation: fadeIn 2s infinite alternate; }
+@keyframes fadeIn {0% {opacity:0.2;} 100% {opacity:1;}}
 
 /* Lock screen */
-input[type="password"] {
-  padding: 10px;
-  font-size: 16px;
-  margin-top: 10px;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-}
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-}
+input[type="password"] { padding: 10px; font-size: 16px; margin-top: 10px; border-radius: 5px; border: none; outline: none; }
+button { margin-top: 10px; padding: 10px 20px; font-size: 16px; border-radius: 5px; border: none; cursor: pointer; }
 
 /* Welcome screen */
-h1 {
-  font-size: 48px;
-  animation: fadeInText 2s ease-in-out;
-}
-@keyframes fadeInText {
-  0% {opacity:0; transform: translateY(20px);}
-  100% {opacity:1; transform: translateY(0);}
-}
+h1 { font-size: 48px; animation: fadeInText 2s ease-in-out; }
+@keyframes fadeInText { 0% {opacity:0; transform: translateY(20px);} 100% {opacity:1; transform: translateY(0);} }
 
 /* Desktop */
-#desktop {
-  display: none;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  color: black;
-}
-
-/* Taskbar */
-#taskbar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-
-/* Start button */
-#startBtn {
-  width: 60px;
-  height: 30px;
-  background: #0078D7;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+#desktop { display: none; width: 100%; height: 100%; position: relative; overflow: hidden; }
 
 /* Desktop icons */
-.icon {
-  width: 80px;
-  text-align: center;
-  cursor: pointer;
-  margin: 20px;
-  color: white;
-}
-.icon img {
-  width: 64px;
-}
+.icon { width: 80px; text-align: center; cursor: pointer; margin: 20px; color: white; display: inline-block; }
+.icon img { width: 64px; }
 
-/* Window */
+/* Windows */
 .window {
   position: absolute;
   width: 300px;
   height: 200px;
-  background: white;
+  background: rgba(255,255,255,0.95);
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
   display: none;
   flex-direction: column;
 }
@@ -131,21 +68,62 @@ h1 {
   cursor: move;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  user-select: none;
 }
-.window-body {
-  flex: 1;
+.window-body { flex: 1; padding: 10px; overflow: auto; }
+.closeBtn { cursor: pointer; }
+
+/* Taskbar */
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  box-sizing: border-box;
+  color: white;
+  font-size: 14px;
+}
+
+/* Start button */
+#startBtn { width: 60px; height: 30px; background: #0078D7; color: white; border: none; border-radius: 5px; cursor: pointer; }
+
+/* Start Menu */
+#startMenu {
+  position: absolute;
+  bottom: 40px;
+  left: 10px;
+  width: 200px;
+  background: rgba(50,50,50,0.95);
+  border-radius: 5px;
+  display: none;
+  flex-direction: column;
   padding: 10px;
-  overflow: auto;
 }
-.closeBtn {
+#startMenu button {
+  background: none;
+  color: white;
+  border: none;
+  text-align: left;
+  padding: 5px;
   cursor: pointer;
 }
+#startMenu button:hover { background: rgba(255,255,255,0.2); }
+
+/* Animations */
+@keyframes slideDown { from { transform: translateY(-20px); opacity:0;} to { transform: translateY(0); opacity:1;} }
 </style>
 </head>
 <body>
 
 <!-- Bootup -->
-<div id="bootup" class="screen" style="display:flex;">
+<div id="bootup" class="screen active">
   <img src="assets/logo.png" alt="Windows Soviet Logo">
   <p>Loading...</p>
 </div>
@@ -170,7 +148,7 @@ h1 {
   </div>
 
   <div class="window" id="win1">
-    <div class="window-header">
+    <div class="window-header" onmousedown="dragMouseDown(event, 'win1')">
       <span>Welcome Window</span>
       <span class="closeBtn" onclick="closeWindow('win1')">✖</span>
     </div>
@@ -180,43 +158,91 @@ h1 {
     </div>
   </div>
 
+  <!-- Taskbar -->
   <div id="taskbar">
-    <button id="startBtn" onclick="alert('Start Menu')">Start</button>
+    <button id="startBtn" onclick="toggleStartMenu()">Start</button>
+    <div id="datetime"></div>
+  </div>
+
+  <!-- Start Menu -->
+  <div id="startMenu">
+    <button onclick="alert('My PC')">My PC</button>
+    <button onclick="alert('Settings')">Settings</button>
+    <button onclick="alert('Shutdown')">Shutdown</button>
   </div>
 </div>
 
 <script>
-function startOS() {
+// Bootup
+setTimeout(() => {
+  document.getElementById('bootup').classList.remove('active');
   setTimeout(() => {
-    document.getElementById('bootup').style.display = 'none';
-    document.getElementById('lockscreen').style.display = 'flex';
-  }, 3000);
-}
+    document.getElementById('lockscreen').classList.add('active');
+  }, 1000);
+}, 3000);
 
+// Password
 function checkPassword() {
   const pw = document.getElementById('password').value;
   if(pw === '1234') {
-    document.getElementById('lockscreen').style.display = 'none';
-    document.getElementById('welcome').style.display = 'flex';
+    document.getElementById('lockscreen').classList.remove('active');
+    document.getElementById('welcome').classList.add('active');
     setTimeout(() => {
-      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('welcome').classList.remove('active');
       document.getElementById('desktop').style.display = 'block';
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
     }, 2000);
-  } else {
-    alert('Wrong password!');
+  } else { alert('Wrong password!'); }
+}
+
+// Open/Close Windows
+function openWindow(id) { document.getElementById(id).style.display = 'flex'; }
+function closeWindow(id) { document.getElementById(id).style.display = 'none'; }
+
+// Start Menu
+function toggleStartMenu() {
+  const menu = document.getElementById('startMenu');
+  menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+}
+
+// Date/Time
+function updateDateTime() {
+  const now = new Date();
+  const date = now.toLocaleDateString();
+  const time = now.toLocaleTimeString();
+  document.getElementById('datetime').textContent = `${date} ${time}`;
+}
+
+// Drag Windows
+function dragMouseDown(e, id) {
+  e.preventDefault();
+  const win = document.getElementById(id);
+  let pos3 = e.clientX;
+  let pos4 = e.clientY;
+
+  function elementDrag(e) {
+    e.preventDefault();
+    const pos1 = pos3 - e.clientX;
+    const pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    win.style.top = (win.offsetTop - pos2) + "px";
+    win.style.left = (win.offsetLeft - pos1) + "px";
   }
+
+  function closeDrag() {
+    document.removeEventListener("mouseup", closeDrag);
+    document.removeEventListener("mousemove", elementDrag);
+  }
+
+  document.addEventListener("mouseup", closeDrag);
+  document.addEventListener("mousemove", elementDrag);
 }
 
-function openWindow(id) {
-  document.getElementById(id).style.display = 'flex';
-}
+// Start OS
+function startOS() { /* Already handled */ }
 
-function closeWindow(id) {
-  document.getElementById(id).style.display = 'none';
-}
-
-startOS();
 </script>
-
 </body>
 </html>
